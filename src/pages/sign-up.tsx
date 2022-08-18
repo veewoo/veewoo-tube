@@ -1,7 +1,8 @@
 import { useFormik } from "formik";
 import { signIn } from "next-auth/react";
 import Head from "next/head";
-import { ReactElement } from "react";
+import Link from "next/link";
+import { ReactElement, useId } from "react";
 import { toast } from "react-toastify";
 import Layout from "src/components/Layout";
 import { NextPageWithLayout } from "src/types/core";
@@ -10,6 +11,7 @@ import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 const SignUp: NextPageWithLayout = () => {
+  const autoId = useId();
   const signUpMutation = trpc.useMutation("auth.signUp", {
     onSuccess: (data) => {
       console.log(data);
@@ -50,11 +52,12 @@ const SignUp: NextPageWithLayout = () => {
   });
 
   return (
-    <div>
-      <form className="flex flex-col" onSubmit={handleSubmit}>
-        <label className="mr-2">Email: </label>
+    <div className="w-screen h-screen flex items-center justify-center">
+      <form className="flex flex-col w-96 mx-auto" onSubmit={handleSubmit}>
+        <label className="mr-2 mb-1" htmlFor={autoId + "email"}>Email: </label>
         <input
-          className="border"
+          id={autoId + "email"}
+          className="border border-gray-300 rounded py-1 px-2 text-gray-900"
           type="email"
           name="email"
           value={values.email}
@@ -62,9 +65,10 @@ const SignUp: NextPageWithLayout = () => {
           onChange={handleChange}
         />
         {errors.email && <p className="text-red-500">{errors.email}</p>}
-        <label className="mr-2">Password: </label>
+        <label className="mr-2 mb-1 mt-4" htmlFor={autoId + "password"}>Password: </label>
         <input
-          className="border"
+          id={autoId + "password"}
+          className="border border-gray-300 rounded py-1 px-2 text-gray-900"
           type="password"
           name="password"
           value={values.password}
@@ -72,9 +76,10 @@ const SignUp: NextPageWithLayout = () => {
           onChange={handleChange}
         />
         {errors.password && <p className="text-red-500">{errors.password}</p>}
-        <label className="mr-2">Confirm Password: </label>
+        <label className="mr-2 mb-1 mt-4" htmlFor={autoId + "confirmPassword"}>Confirm Password: </label>
         <input
-          className="border"
+          id={autoId + "confirmPassword"}
+          className="border border-gray-300 rounded py-1 px-2 text-gray-900"
           type="password"
           name="confirmPassword"
           value={values.confirmPassword}
@@ -84,10 +89,16 @@ const SignUp: NextPageWithLayout = () => {
         {errors.confirmPassword && (
           <p className="text-red-500">{errors.confirmPassword}</p>
         )}
-        <button className="ml-4">Sign up</button>
+        <div className="flex justify-center mt-4">
+        <button type="submit" className="bg-green-600 hover:bg-green-500 text-white rounded px-5 py-1 mr-4">Sign up</button>
+        <Link href="/">
+        <a type="submit" className="bg-red-600 hover:bg-red-500 text-white rounded px-5 py-1">Back</a>
+        </Link>
+        </div>
       </form>
     </div>
   );
 };
 
+SignUp.getLayout = (page: ReactElement) => <Layout >{page}</Layout>;
 export default SignUp;

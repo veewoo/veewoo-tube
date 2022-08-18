@@ -78,5 +78,5 @@ const Home: NextPageWithLayout = () => {
   );
 };
 
-Home.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
+Home.getLayout = (page: ReactElement) => <Layout hasHeader>{page}</Layout>;
 export default Home;

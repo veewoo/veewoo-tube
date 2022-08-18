@@ -2,15 +2,16 @@ import { ReactNode } from "react";
 import Header from "./Header";
 
 type Props = {
+  hasHeader?: boolean;
   children: ReactNode;
 };
 
-function Layout({ children }: Props) {
+function Layout({ hasHeader, children }: Props) {
   return (
-    <>
-      <Header />
+    <div className=" text-black">
+      {hasHeader && <Header />}
       <main>{children}</main>
-    </>
+    </div>
   );
 }
 

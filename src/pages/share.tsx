@@ -2,7 +2,8 @@ import axios, { AxiosError } from "axios";
 import { useFormik } from "formik";
 import { signIn } from "next-auth/react";
 import Head from "next/head";
-import { ReactElement } from "react";
+import Link from "next/link";
+import { ReactElement, useId } from "react";
 import { toast } from "react-toastify";
 import Layout from "src/components/Layout";
 import { NextPageWithLayout } from "src/types/core";
@@ -15,6 +16,7 @@ const validationSchema = z.object({
 });
 
 const SignUp: NextPageWithLayout = () => {
+  const autoId = useId();
   const signUpMutation = trpc.useMutation("auth.signUp", {
     onSuccess: (data) => {
       console.log(data);
@@ -46,11 +48,12 @@ const SignUp: NextPageWithLayout = () => {
     });
 
   return (
-    <div>
-      <form className="flex flex-col" onSubmit={handleSubmit}>
-        <label className="mr-2">Url: </label>
+    <div className="w-screen h-screen flex items-center justify-center">
+      <form className="flex flex-col w-96 mx-auto" onSubmit={handleSubmit}>
+        <label className="mr-2 mb-1" htmlFor={autoId + "url"}>Url: </label>
         <input
-          className="border"
+          id={autoId + "url"}
+          className="border border-gray-300 rounded py-1 px-2 text-gray-900"
           type="text"
           name="url"
           value={values.url}
@@ -58,12 +61,16 @@ const SignUp: NextPageWithLayout = () => {
           onChange={handleChange}
         />
         {errors.url && <p className="text-red-500">{errors.url}</p>}
-        <button className="mt-2" type="submit" disabled={!isValid}>
-          Upload
-        </button>
+        <div className="flex justify-center mt-4">
+        <button type="submit" className="bg-green-600 hover:bg-green-500 text-white rounded px-5 py-1 mr-4">Share</button>
+        <Link href="/">
+        <a type="submit" className="bg-red-600 hover:bg-red-500 text-white rounded px-5 py-1">Back</a>
+        </Link>
+        </div>
       </form>
     </div>
   );
 };
 
+SignUp.getLayout = (page: ReactElement) => <Layout hasHeader>{page}</Layout>;
 export default SignUp;
