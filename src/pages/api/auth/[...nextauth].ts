@@ -1,17 +1,27 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-
+import { compare } from "bcrypt";
+import { sign, verify } from "jsonwebtoken";
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../../../server/db/client";
+import { loginSchema } from "src/utils/auth";
+import { User } from "prisma/generated/client";
+import axios from "axios";
+
+const THREE_DAYS = 3 * 24 * 60 * 60;
 
 export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+    maxAge: THREE_DAYS,
+  },
   // Include user.id on session
   callbacks: {
     session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
-      }
+      // if (session.user) {
+      //   session.user.id = user.id;
+      // }
       return session;
     },
   },
@@ -26,25 +36,36 @@ export const authOptions: NextAuthOptions = {
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        // Add logic here to look up the user from the credentials supplied
-        const user = { id: 1, name: "J Smith", email: "jsmith@example.com" };
+        try {
+          const { email, password } = await loginSchema.parseAsync(credentials);
 
-        if (user) {
-          // Any object returned will be saved in `user` property of the JWT
+          const user = await prisma.user.findFirst({
+            where: { email },
+          });
+
+          if (!user) throw new Error("USER_NOT_FOUND");
+
+          const isPasswordValid = await comparePassword(user, password);
+
+          if (!isPasswordValid) {
+            throw new Error("PASSWORD_INVALID");
+          }
+
           return user;
-        } else {
-          // If you return null then an error will be displayed advising the user to check their details.
-          return null;
-
-          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+        } catch (error) {
+          throw error;
         }
       },
     }),
   ],
 };
+
+async function comparePassword(user: User, password: string) {
+  return await compare(password, user.password ?? "");
+}
 
 export default NextAuth(authOptions);

@@ -4,6 +4,8 @@ import type { AppRouter } from "../server/router";
 import superjson from "superjson";
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 import type { AppProps } from "next/app";
 import { NextPageWithLayout } from "src/types/core";
 import { ReactElement } from "react";
@@ -21,6 +23,7 @@ const MyApp = ({
   return (
     <SessionProvider session={session}>
       {getLayout(<Component {...pageProps} />)}
+      <ToastContainer />
     </SessionProvider>
   );
 };
