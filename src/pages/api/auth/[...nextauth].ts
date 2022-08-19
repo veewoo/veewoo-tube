@@ -18,10 +18,16 @@ export const authOptions: NextAuthOptions = {
   },
   // Include user.id on session
   callbacks: {
-    session({ session, user }) {
-      // if (session.user) {
-      //   session.user.id = user.id;
-      // }
+    jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (token.user) {
+        session.user = token.user;
+      }
       return session;
     },
   },

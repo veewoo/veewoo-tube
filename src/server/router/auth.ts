@@ -11,16 +11,14 @@ export const authRouter = createRouter().mutation("signUp", {
   async resolve({ input, ctx }) {
     try {
       const { email, password } = input;
-      const hasedPassword = await hash(password, 10);
+      const hashedPassword = await hash(password, 10);
 
-      const user = await ctx.prisma.user.create({
+      await ctx.prisma.user.create({
         data: {
           email,
-          password: hasedPassword,
+          password: hashedPassword,
         },
       });
-
-      console.log("sign up ================\n", { user });
 
       return true;
     } catch (error) {
