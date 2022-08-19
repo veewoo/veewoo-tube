@@ -1,4 +1,5 @@
-import { ReactNode, useState } from "react";
+/* eslint-disable @next/next/no-img-element */
+import { memo, ReactNode, useState } from "react";
 import { useQuery } from "react-query";
 import youtubeService from "src/services/youtubeService";
 import { VideoInfo } from "src/types/video";
@@ -8,14 +9,33 @@ type Props = {
 };
 
 function VideoCard({ url }: Props) {
-  const [video, setVideo] = useState<VideoInfo | null>(null);
-
-  const { data, isLoading } = useQuery("fetchVideo", async () => {
+  const { data, isLoading } = useQuery(["fetchVideo", url], async () => {
     const { data } = await youtubeService.getVideoInfo(url);
     return data;
   });
 
-  return <div className="border p-4"></div>;
+  return (
+    <div className="flex border p-4">
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : !data ? (
+        <div>Error</div>
+      ) : (
+        <>
+          <img
+            className="mr-2"
+            src={data.thumbnail_url}
+            alt={data.title}
+            width={"10%"}
+          />
+          <div>
+            <h3>{data.title}</h3>
+            <p>{data.author_name}</p>
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
 
-export default VideoCard;
+export default memo(VideoCard);

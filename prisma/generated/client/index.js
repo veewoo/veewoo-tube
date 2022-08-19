@@ -178,7 +178,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/hungnguyen/Work/ytb-share-social/prisma/generated/client",
+      "value": "/Users/hungmanscaped/Work/ytb-share-social/prisma/generated/client",
       "fromEnvVar": null
     },
     "config": {
