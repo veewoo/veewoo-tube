@@ -116,7 +116,7 @@ function Header() {
                     </p>
                   </div>
                   <button
-                    className="ml-4 rounded border border-blue-600 px-5 py-1 text-blue-600 hover:bg-blue-600 hover:text-white disabled:cursor-not-allowed disabled:bg-gray-500"
+                    className="ml-4 rounded border border-blue-600 px-5 py-1 text-blue-600 hover:bg-blue-600 hover:text-white disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-white"
                     type="submit"
                     disabled={isSubmitting}
                   >
