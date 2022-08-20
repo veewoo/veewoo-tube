@@ -180,7 +180,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/hungnguyen/Work/ytb-share-social/prisma/generated/client",
+      "value": "/Users/hungnguyen/Work/veewoo-tube/prisma/generated/client",
       "fromEnvVar": null
     },
     "config": {
