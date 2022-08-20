@@ -9,7 +9,14 @@ import Link from "next/link";
 function Header() {
   const { data, status } = useSession();
 
-  const { values, errors, handleSubmit, handleBlur, handleChange } = useFormik({
+  const {
+    isSubmitting,
+    values,
+    errors,
+    handleSubmit,
+    handleBlur,
+    handleChange,
+  } = useFormik({
     validationSchema: toFormikValidationSchema(
       z.object({
         email: z.string().email("Invalid email address"),
@@ -81,13 +88,14 @@ function Header() {
                 <form className="flex" onSubmit={handleSubmit}>
                   <div className="relative">
                     <input
-                      className="mr-4 rounded border border-gray-300 bg-white px-2 py-1"
+                      className="mr-4 rounded border border-gray-300 bg-white px-2 py-1 disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-white"
                       type="email"
                       name="email"
                       placeholder="Email"
                       value={values.email}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      disabled={isSubmitting}
                     />
                     <p className="absolute left-1 bottom-[-18px] text-sm text-red-500">
                       {errors.email}
@@ -95,7 +103,7 @@ function Header() {
                   </div>
                   <div className="relative">
                     <input
-                      className="rounded border border-gray-300 bg-white px-2 py-1"
+                      className="rounded border border-gray-300 bg-white px-2 py-1 disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-white"
                       type="password"
                       name="password"
                       placeholder="Password"
@@ -108,8 +116,9 @@ function Header() {
                     </p>
                   </div>
                   <button
-                    className="ml-4 rounded border border-blue-600 px-5 py-1 text-blue-600 hover:bg-blue-600 hover:text-white"
+                    className="ml-4 rounded border border-blue-600 px-5 py-1 text-blue-600 hover:bg-blue-600 hover:text-white disabled:cursor-not-allowed disabled:bg-gray-500"
                     type="submit"
+                    disabled={isSubmitting}
                   >
                     Login
                   </button>
