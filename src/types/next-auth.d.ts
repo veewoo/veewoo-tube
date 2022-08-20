@@ -1,4 +1,5 @@
 import { DefaultSession } from "next-auth";
+import { User } from "prisma/generated/client";
 
 declare module "next-auth" {
   /**
@@ -7,7 +8,8 @@ declare module "next-auth" {
   interface Session {
     user?: {
       id: string;
-    } & DefaultSession["user"];
+    } & DefaultSession["user"] &
+      User;
   }
 }
 

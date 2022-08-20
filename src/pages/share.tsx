@@ -1,7 +1,5 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { useFormik } from "formik";
-import { signIn } from "next-auth/react";
-import Head from "next/head";
 import Link from "next/link";
 import { ReactElement, useId } from "react";
 import { toast } from "react-toastify";
@@ -18,28 +16,34 @@ const validationSchema = z.object({
 
 const SignUp: NextPageWithLayout = () => {
   const autoId = useId();
-  const addVideoMutation = trpc.useMutation("video.add", {
-    onSuccess: (data) => {
-      console.log(data);
-    },
-  });
 
-  const { values, errors, handleSubmit, handleBlur, handleChange } = useFormik({
-    validationSchema: toFormikValidationSchema(validationSchema),
-    initialValues: {
-      url: "",
-    },
-    onSubmit: async ({ url }) => {
-      try {
-        youtubeService.getVideoInfo(url);
-        addVideoMutation.mutate({ url });
-      } catch (error) {
-        if (error instanceof AxiosError && error.response?.status == 404) {
-          toast.error("Invalid URL");
-        } else {
-          toast.error((error as Error).message);
+  const { values, errors, handleSubmit, handleBlur, handleChange, resetForm } =
+    useFormik({
+      validationSchema: toFormikValidationSchema(validationSchema),
+      initialValues: {
+        url: "",
+      },
+      onSubmit: async ({ url }) => {
+        try {
+          youtubeService.getVideoInfo(url);
+          addVideoMutation.mutate({ url });
+        } catch (error) {
+          if (error instanceof AxiosError && error.response?.status == 404) {
+            toast.error("Invalid URL");
+          } else {
+            toast.error((error as Error).message);
+          }
         }
-      }
+      },
+    });
+
+  const addVideoMutation = trpc.useMutation("editVideo.add", {
+    onSuccess: () => {
+      toast.success("Video added successfully!");
+      resetForm();
+    },
+    onError: () => {
+      toast.error("An error occurred");
     },
   });
 
@@ -62,7 +66,8 @@ const SignUp: NextPageWithLayout = () => {
         <div className="mt-4 flex justify-center">
           <button
             type="submit"
-            className="mr-4 rounded bg-green-600 px-5 py-1 text-white hover:bg-green-500"
+            className="mr-4 rounded bg-green-600 px-5 py-1 text-white hover:bg-green-500 disabled:cursor-not-allowed disabled:bg-gray-400	"
+            disabled={addVideoMutation.isLoading}
           >
             Share
           </button>

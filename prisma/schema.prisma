@@ -59,6 +59,8 @@ model User {
     accounts      Account[]
     sessions      Session[]
     videos        Video[]
+    upVotes       String[]
+    downVotes     String[]
 }
 
 model VerificationToken {

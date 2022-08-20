@@ -132,7 +132,9 @@ exports.Prisma.UserScalarFieldEnum = makeEnum({
   password: 'password',
   emailVerified: 'emailVerified',
   image: 'image',
-  role: 'role'
+  role: 'role',
+  upVotes: 'upVotes',
+  downVotes: 'downVotes'
 });
 
 exports.Prisma.VerificationTokenScalarFieldEnum = makeEnum({

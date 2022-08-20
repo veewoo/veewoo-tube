@@ -75,6 +75,8 @@ export type User = {
   emailVerified: Date | null
   image: string | null
   role: string | null
+  upVotes: string[]
+  downVotes: string[]
 }
 
 /**
@@ -4879,6 +4881,8 @@ export namespace Prisma {
     emailVerified: number
     image: number
     role: number
+    upVotes: number
+    downVotes: number
     _all: number
   }
 
@@ -4911,6 +4915,8 @@ export namespace Prisma {
     emailVerified?: true
     image?: true
     role?: true
+    upVotes?: true
+    downVotes?: true
     _all?: true
   }
 
@@ -5000,6 +5006,8 @@ export namespace Prisma {
     emailVerified: Date | null
     image: string | null
     role: string | null
+    upVotes: string[]
+    downVotes: string[]
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -5030,6 +5038,8 @@ export namespace Prisma {
     accounts?: boolean | AccountFindManyArgs
     sessions?: boolean | SessionFindManyArgs
     videos?: boolean | VideoFindManyArgs
+    upVotes?: boolean
+    downVotes?: boolean
     _count?: boolean | UserCountOutputTypeArgs
   }
 
@@ -6845,7 +6855,9 @@ export namespace Prisma {
     password: 'password',
     emailVerified: 'emailVerified',
     image: 'image',
-    role: 'role'
+    role: 'role',
+    upVotes: 'upVotes',
+    downVotes: 'downVotes'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -7093,6 +7105,8 @@ export namespace Prisma {
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     videos?: VideoListRelationFilter
+    upVotes?: StringNullableListFilter
+    downVotes?: StringNullableListFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -7106,6 +7120,8 @@ export namespace Prisma {
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     videos?: VideoOrderByRelationAggregateInput
+    upVotes?: SortOrder
+    downVotes?: SortOrder
   }
 
   export type UserWhereUniqueInput = {
@@ -7121,6 +7137,8 @@ export namespace Prisma {
     emailVerified?: SortOrder
     image?: SortOrder
     role?: SortOrder
+    upVotes?: SortOrder
+    downVotes?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -7137,6 +7155,8 @@ export namespace Prisma {
     emailVerified?: DateTimeNullableWithAggregatesFilter | Date | string | null
     image?: StringNullableWithAggregatesFilter | string | null
     role?: StringNullableWithAggregatesFilter | string | null
+    upVotes?: StringNullableListFilter
+    downVotes?: StringNullableListFilter
   }
 
   export type VerificationTokenWhereInput = {
@@ -7423,6 +7443,8 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     videos?: VideoCreateNestedManyWithoutUserInput
+    upVotes?: UserCreateupVotesInput | Enumerable<string>
+    downVotes?: UserCreatedownVotesInput | Enumerable<string>
   }
 
   export type UserUncheckedCreateInput = {
@@ -7436,6 +7458,8 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     videos?: VideoUncheckedCreateNestedManyWithoutUserInput
+    upVotes?: UserCreateupVotesInput | Enumerable<string>
+    downVotes?: UserCreatedownVotesInput | Enumerable<string>
   }
 
   export type UserUpdateInput = {
@@ -7448,6 +7472,8 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     videos?: VideoUpdateManyWithoutUserNestedInput
+    upVotes?: UserUpdateupVotesInput | Enumerable<string>
+    downVotes?: UserUpdatedownVotesInput | Enumerable<string>
   }
 
   export type UserUncheckedUpdateInput = {
@@ -7460,6 +7486,8 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     videos?: VideoUncheckedUpdateManyWithoutUserNestedInput
+    upVotes?: UserUpdateupVotesInput | Enumerable<string>
+    downVotes?: UserUpdatedownVotesInput | Enumerable<string>
   }
 
   export type UserCreateManyInput = {
@@ -7470,6 +7498,8 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     role?: string | null
+    upVotes?: UserCreateupVotesInput | Enumerable<string>
+    downVotes?: UserCreatedownVotesInput | Enumerable<string>
   }
 
   export type UserUpdateManyMutationInput = {
@@ -7479,6 +7509,8 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    upVotes?: UserUpdateupVotesInput | Enumerable<string>
+    downVotes?: UserUpdatedownVotesInput | Enumerable<string>
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -7488,6 +7520,8 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    upVotes?: UserUpdateupVotesInput | Enumerable<string>
+    downVotes?: UserUpdatedownVotesInput | Enumerable<string>
   }
 
   export type VerificationTokenCreateInput = {
@@ -7812,6 +7846,14 @@ export namespace Prisma {
     none?: VideoWhereInput
   }
 
+  export type StringNullableListFilter = {
+    equals?: Enumerable<string> | null
+    has?: string | null
+    hasEvery?: Enumerable<string>
+    hasSome?: Enumerable<string>
+    isEmpty?: boolean
+  }
+
   export type AccountOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -7832,6 +7874,8 @@ export namespace Prisma {
     emailVerified?: SortOrder
     image?: SortOrder
     role?: SortOrder
+    upVotes?: SortOrder
+    downVotes?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -7980,6 +8024,14 @@ export namespace Prisma {
     connect?: Enumerable<VideoWhereUniqueInput>
   }
 
+  export type UserCreateupVotesInput = {
+    set: Enumerable<string>
+  }
+
+  export type UserCreatedownVotesInput = {
+    set: Enumerable<string>
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<Enumerable<AccountCreateWithoutUserInput>, Enumerable<AccountUncheckedCreateWithoutUserInput>>
     connectOrCreate?: Enumerable<AccountCreateOrConnectWithoutUserInput>
@@ -8046,6 +8098,16 @@ export namespace Prisma {
     update?: Enumerable<VideoUpdateWithWhereUniqueWithoutUserInput>
     updateMany?: Enumerable<VideoUpdateManyWithWhereWithoutUserInput>
     deleteMany?: Enumerable<VideoScalarWhereInput>
+  }
+
+  export type UserUpdateupVotesInput = {
+    set?: Enumerable<string>
+    push?: string | Enumerable<string>
+  }
+
+  export type UserUpdatedownVotesInput = {
+    set?: Enumerable<string>
+    push?: string | Enumerable<string>
   }
 
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
@@ -8268,6 +8330,8 @@ export namespace Prisma {
     role?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    upVotes?: UserCreateupVotesInput | Enumerable<string>
+    downVotes?: UserCreatedownVotesInput | Enumerable<string>
   }
 
   export type UserUncheckedCreateWithoutVideosInput = {
@@ -8280,6 +8344,8 @@ export namespace Prisma {
     role?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    upVotes?: UserCreateupVotesInput | Enumerable<string>
+    downVotes?: UserCreatedownVotesInput | Enumerable<string>
   }
 
   export type UserCreateOrConnectWithoutVideosInput = {
@@ -8301,6 +8367,8 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    upVotes?: UserUpdateupVotesInput | Enumerable<string>
+    downVotes?: UserUpdatedownVotesInput | Enumerable<string>
   }
 
   export type UserUncheckedUpdateWithoutVideosInput = {
@@ -8312,6 +8380,8 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    upVotes?: UserUpdateupVotesInput | Enumerable<string>
+    downVotes?: UserUpdatedownVotesInput | Enumerable<string>
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -8324,6 +8394,8 @@ export namespace Prisma {
     role?: string | null
     sessions?: SessionCreateNestedManyWithoutUserInput
     videos?: VideoCreateNestedManyWithoutUserInput
+    upVotes?: UserCreateupVotesInput | Enumerable<string>
+    downVotes?: UserCreatedownVotesInput | Enumerable<string>
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -8336,6 +8408,8 @@ export namespace Prisma {
     role?: string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     videos?: VideoUncheckedCreateNestedManyWithoutUserInput
+    upVotes?: UserCreateupVotesInput | Enumerable<string>
+    downVotes?: UserCreatedownVotesInput | Enumerable<string>
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -8357,6 +8431,8 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUpdateManyWithoutUserNestedInput
     videos?: VideoUpdateManyWithoutUserNestedInput
+    upVotes?: UserUpdateupVotesInput | Enumerable<string>
+    downVotes?: UserUpdatedownVotesInput | Enumerable<string>
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -8368,6 +8444,8 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     videos?: VideoUncheckedUpdateManyWithoutUserNestedInput
+    upVotes?: UserUpdateupVotesInput | Enumerable<string>
+    downVotes?: UserUpdatedownVotesInput | Enumerable<string>
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -8380,6 +8458,8 @@ export namespace Prisma {
     role?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     videos?: VideoCreateNestedManyWithoutUserInput
+    upVotes?: UserCreateupVotesInput | Enumerable<string>
+    downVotes?: UserCreatedownVotesInput | Enumerable<string>
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -8392,6 +8472,8 @@ export namespace Prisma {
     role?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     videos?: VideoUncheckedCreateNestedManyWithoutUserInput
+    upVotes?: UserCreateupVotesInput | Enumerable<string>
+    downVotes?: UserCreatedownVotesInput | Enumerable<string>
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -8413,6 +8495,8 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     videos?: VideoUpdateManyWithoutUserNestedInput
+    upVotes?: UserUpdateupVotesInput | Enumerable<string>
+    downVotes?: UserUpdatedownVotesInput | Enumerable<string>
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -8424,6 +8508,8 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     videos?: VideoUncheckedUpdateManyWithoutUserNestedInput
+    upVotes?: UserUpdateupVotesInput | Enumerable<string>
+    downVotes?: UserUpdatedownVotesInput | Enumerable<string>
   }
 
   export type AccountCreateWithoutUserInput = {

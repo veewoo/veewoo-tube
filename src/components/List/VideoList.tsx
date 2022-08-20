@@ -1,26 +1,46 @@
-import { ReactNode, useState } from "react";
-import { useQuery } from "react-query";
-import youtubeService from "src/services/youtubeService";
-import { VideoInfo } from "src/types/video";
+import { useSession } from "next-auth/react";
 import { trpc } from "src/utils/trpc";
 import VideoCard from "../Card/VideoCard";
 
-type Props = {
-  url: string;
-};
-
 function VideoList() {
-  const { data, isLoading } = trpc.useQuery(["video.all"]);
+  const { data: session } = useSession();
+  const { data, isLoading } = trpc.useQuery(["video.all", session?.user?.id]);
 
-  if (isLoading) return <div>Loading...</div>;
+  const getVoteStatus = (videoId: string) => {
+    if (!session?.user) {
+      return "";
+    }
 
-  if (!data) return <div>Data not found!</div>;
+    const user = session.user;
+
+    if (user.upVotes.includes(videoId)) {
+      return "upVotes";
+    }
+
+    if (user.downVotes.includes(videoId)) {
+      return "downVotes";
+    }
+
+    return "";
+  };
 
   return (
-    <div className="container mx-auto mt-4">
-      {data.map((video) => (
-        <VideoCard key={video.id} url={video.url} />
-      ))}
+    <div className="container mx-auto mt-4 space-y-4">
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : !data ? (
+        <div>Data not found!</div>
+      ) : (
+        data.map((video) => (
+          <VideoCard
+            key={video.id}
+            id={video.id}
+            url={video.url}
+            email={video.User.email ?? "unknown"}
+            voteType={getVoteStatus(video.id)}
+          />
+        ))
+      )}
     </div>
   );
 }

@@ -2,14 +2,15 @@
 import { createRouter } from "./context";
 import superjson from "superjson";
 
-import { videoRouter } from "./video";
-import { protectedExampleRouter } from "./protected-example-router";
+import { editVideoRouter, videoRouter } from "./video";
+import { voteRouter } from "./vote";
 import { authRouter } from "./auth";
 
 export const appRouter = createRouter()
   .transformer(superjson)
   .merge("video.", videoRouter)
-  .merge("question.", protectedExampleRouter)
+  .merge("editVideo.", editVideoRouter)
+  .merge("voting.", voteRouter)
   .merge("auth.", authRouter);
 
 // export type definition of API

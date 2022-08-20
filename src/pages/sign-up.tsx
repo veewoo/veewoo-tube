@@ -1,6 +1,5 @@
 import { useFormik } from "formik";
 import { signIn } from "next-auth/react";
-import Head from "next/head";
 import Link from "next/link";
 import { ReactElement, useId } from "react";
 import { toast } from "react-toastify";
@@ -9,45 +8,46 @@ import { NextPageWithLayout } from "src/types/core";
 import { trpc } from "src/utils/trpc";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
+import Router from "next/router";
+
+const validationSchema = z
+  .object({
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(6, "Password must be 6 characters or more."),
+    confirmPassword: z.string(),
+  })
+  .refine(({ password, confirmPassword }) => password === confirmPassword, {
+    message: "Passwords must match.",
+    path: ["confirmPassword"],
+  });
 
 const SignUp: NextPageWithLayout = () => {
   const autoId = useId();
   const signUpMutation = trpc.useMutation("auth.signUp", {
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess(data) {
+      if (data.error) {
+        toast.error(data.error);
+      } else {
+        Router.push("/");
+      }
+    },
+    onError() {
+      toast.error("An error occurred");
     },
   });
 
   const { values, errors, handleSubmit, handleBlur, handleChange } = useFormik({
-    validationSchema: toFormikValidationSchema(
-      z
-        .object({
-          email: z.string().email("Invalid email address"),
-          password: z.string().min(6, "Password must be 6 characters or more."),
-          confirmPassword: z.string(),
-        })
-        .refine(
-          ({ password, confirmPassword }) => password === confirmPassword,
-          {
-            message: "Passwords must match.",
-            path: ["confirmPassword"],
-          }
-        )
-    ),
+    validationSchema: toFormikValidationSchema(validationSchema),
     initialValues: {
       email: "",
       password: "",
       confirmPassword: "",
     },
     onSubmit: async ({ email, password }) => {
-      try {
-        signUpMutation.mutate({
-          email,
-          password,
-        });
-      } catch (error) {
-        toast.error((error as Error).message);
-      }
+      signUpMutation.mutate({
+        email,
+        password,
+      });
     },
   });
 
